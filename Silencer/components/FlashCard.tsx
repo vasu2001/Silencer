@@ -7,6 +7,7 @@ import {
   Animated,
   StyleProp,
   ViewStyle,
+  TouchableOpacity,
 } from 'react-native';
 
 export interface FlashCardProps {
@@ -23,14 +24,7 @@ export default class FlashCardComponent extends React.Component<
   constructor(props: FlashCardProps) {
     super(props);
     this.state = {};
-  }
 
-  private answerVisible: Animated.Value = new Animated.Value(0);
-  private answerVisibleValue: number = 0;
-  private frontInterpolate: Animated.AnimatedInterpolation | null = null;
-  private backInterpolate: Animated.AnimatedInterpolation | null = null;
-
-  componentWillMount() {
     this.frontInterpolate = this.answerVisible.interpolate({
       inputRange: [0, 180],
       outputRange: ['0deg', '180deg'],
@@ -39,10 +33,19 @@ export default class FlashCardComponent extends React.Component<
       inputRange: [0, 180],
       outputRange: ['180deg', '360deg'],
     });
+
     this.answerVisible.addListener(
       ({value}) => (this.answerVisibleValue = value),
     );
   }
+
+  private answerVisible: Animated.Value = new Animated.Value(0);
+
+  //value of animated state for comparisions
+  private answerVisibleValue: number = 0;
+
+  private frontInterpolate: Animated.AnimatedInterpolation | null = null;
+  private backInterpolate: Animated.AnimatedInterpolation | null = null;
 
   componentWillReceiveProps() {
     // this.answerVisible.setValue(0);
@@ -90,20 +93,20 @@ export default class FlashCardComponent extends React.Component<
 
 const styles = StyleSheet.create({
   mainContainer: {
-    borderWidth: 1,
+    // borderWidth: 1,
     padding: 10,
     margin: 5,
     borderRadius: 20,
-    elevation: 2,
+    elevation: 5,
     height: 250,
     width: 250,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     backfaceVisibility: 'hidden',
     position: 'absolute',
   },
   cardStyle: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     flex: 1,
   },
 });
