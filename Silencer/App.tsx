@@ -19,11 +19,19 @@ import {
 } from 'react-native';
 
 import MainNavigationComponent from './navigations/MainNavigation';
+import MainReducer from './redux/reducer';
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
 
 declare const global: {HermesInternal: null | {}};
+const store = createStore(MainReducer);
 
 const App = () => {
-  return <MainNavigationComponent />;
+  return (
+    <Provider store={store}>
+      <MainNavigationComponent />
+    </Provider>
+  );
 };
 
 const styles = StyleSheet.create({});

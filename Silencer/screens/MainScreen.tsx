@@ -2,6 +2,7 @@ import * as React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import ProgressIndicatorComponent from '../components/ProgressIndicator';
 import {StackScreenProps} from '@react-navigation/stack';
+import CustomButton from '../components/CustomButton';
 
 export interface MainScreenProps {
   navigation: {navigate: (routename: string) => void};
@@ -24,10 +25,10 @@ export default class MainScreenComponent extends React.Component<
         <ProgressIndicatorComponent questionBoxes={tempDataProgress} />
         <View>
           <Text style={styles.totalText}>Total Cards: {40}</Text>
-          {this.customButton('Add Card', this.addCard)}
+          <CustomButton text="Add Card" callback={this.addCard} />
         </View>
 
-        {this.customButton('Resume learning', this.resume)}
+        <CustomButton text="Resume Learning" callback={this.resume} />
       </View>
     );
   }
@@ -38,19 +39,6 @@ export default class MainScreenComponent extends React.Component<
 
   private addCard = (): void => {
     this.props.navigation.navigate('Add Card');
-  };
-
-  private customButton = (
-    text: string,
-    callback: () => void,
-  ): React.SFCElement<any> => {
-    return (
-      <TouchableOpacity style={{marginVertical: 10}} onPress={callback}>
-        <View style={styles.buttonContainer}>
-          <Text style={styles.buttonText}>{text}</Text>
-        </View>
-      </TouchableOpacity>
-    );
   };
 }
 
@@ -64,20 +52,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     margin: 10,
-  },
-  buttonText: {
-    fontSize: 20,
-    color: 'white',
-    paddingHorizontal: 5,
-  },
-  buttonContainer: {
-    padding: 15,
-    borderRadius: 20,
-    elevation: 5,
-    backgroundColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
   },
 });
 
