@@ -14,6 +14,7 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import FlashCardComponent from './FlashCard';
 import {questionInterface} from '../redux/utils';
+import Snackbar from 'react-native-snackbar';
 
 interface FlashCardInterface {
   question: string;
@@ -48,15 +49,21 @@ export default class CardQueueComponent extends React.Component<
   }
 
   scollRef: FlatList | null = null;
-  //   activeCardIndex: number = 0;
   cardOneAnimate: Animated.Value = new Animated.Value(0);
   cardTwoAnimate: Animated.Value = new Animated.Value(-1);
   width: number = 0;
+  //to check if anyother component has already dispatched for sessionSubmit
   wait: boolean = false;
 
-  componentDidUpdate(prevProps: CardQueueProps) {
+  componentDidUpdate() {
     if (this.state.activeQues >= this.props.questions.length && !this.wait) {
       // console.log('componentdid update');
+      Snackbar.show({
+        text: 'There are no more cards for the session',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: 'white',
+        backgroundColor: 'black',
+      });
       this.wait = true;
       this.props.sessionSubmit();
     }
@@ -65,6 +72,12 @@ export default class CardQueueComponent extends React.Component<
   componentDidMount() {
     if (this.state.activeQues >= this.props.questions.length && !this.wait) {
       // console.log('componentdid mount');
+      Snackbar.show({
+        text: 'There are no cards for the session',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: 'white',
+        backgroundColor: 'black',
+      });
       this.wait = true;
       this.props.sessionSubmit();
     }

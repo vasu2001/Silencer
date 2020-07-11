@@ -24,7 +24,6 @@ class CardScreenComponent extends React.Component<
   constructor(props: CardScreenProps & ConnectedProps<typeof connector>) {
     super(props);
     this.state = {};
-    // console.log(this.props.route.params);
   }
 
   public render() {
