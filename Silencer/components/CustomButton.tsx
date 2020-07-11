@@ -4,12 +4,24 @@ import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 interface CustomButtonProps {
   text: string;
   callback: () => void;
+  active?: boolean;
 }
 
-const CustomButton: React.SFC<CustomButtonProps> = ({text, callback}) => {
+const CustomButton: React.SFC<CustomButtonProps> = ({
+  text,
+  callback,
+  active = true,
+}) => {
   return (
-    <TouchableOpacity style={{marginVertical: 10}} onPress={callback}>
-      <View style={styles.buttonContainer}>
+    <TouchableOpacity
+      style={{marginVertical: 10}}
+      onPress={callback}
+      disabled={!active}>
+      <View
+        style={[
+          styles.buttonContainer,
+          {backgroundColor: active ? 'black' : 'grey'},
+        ]}>
         <Text style={styles.buttonText}>{text}</Text>
       </View>
     </TouchableOpacity>
@@ -26,7 +38,6 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 20,
     elevation: 5,
-    backgroundColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',

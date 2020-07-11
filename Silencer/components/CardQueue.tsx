@@ -52,16 +52,20 @@ export default class CardQueueComponent extends React.Component<
   cardOneAnimate: Animated.Value = new Animated.Value(0);
   cardTwoAnimate: Animated.Value = new Animated.Value(-1);
   width: number = 0;
+  wait: boolean = false;
 
-  componentDidUpdate() {
-    if (this.state.activeQues >= this.props.questions.length) {
+  componentDidUpdate(prevProps: CardQueueProps) {
+    if (this.state.activeQues >= this.props.questions.length && !this.wait) {
+      // console.log('componentdid update');
+      this.wait = true;
       this.props.sessionSubmit();
     }
   }
 
   componentDidMount() {
-    if (this.props.questions.length === 0) this.props.sessionSubmit();
-    if (this.state.activeQues >= this.props.questions.length) {
+    if (this.state.activeQues >= this.props.questions.length && !this.wait) {
+      // console.log('componentdid mount');
+      this.wait = true;
       this.props.sessionSubmit();
     }
   }

@@ -30,7 +30,7 @@ const MainReducer = (
     case dispatchNames.submitSession:
       return {
         ...state,
-        session: state.session++,
+        session: state.session + 1,
       };
 
     case dispatchNames.resetState: {

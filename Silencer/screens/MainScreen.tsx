@@ -38,13 +38,17 @@ class MainScreenComponent extends React.Component<
 
         <View>
           <Text style={styles.totalText}>Session: {this.props.session}</Text>
-          <CustomButton text="Learn" callback={this.resume} />
+          <CustomButton
+            text="Learn"
+            callback={this.learn}
+            active={this.props.totalCards > 0}
+          />
         </View>
       </View>
     );
   }
 
-  private resume = (): void => {
+  private learn = (): void => {
     this.props.navigation.navigate('Learn', {progress: this.props.progress});
   };
 
