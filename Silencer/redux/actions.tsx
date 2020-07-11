@@ -1,5 +1,6 @@
 import {dispatchNames, stateInterface, questionInterface} from './utils';
-import {v4 as uuid4} from 'uuid';
+import 'react-native-get-random-values';
+import {v4 as uuidv4} from 'uuid';
 
 interface dispatchInterface {
   type: string;
@@ -12,14 +13,14 @@ const addNewQues = (ques: questionInterface): dispatchInterface => ({
 });
 
 const incorrectResponse = (index: number): dispatchInterface => ({
-  type: dispatchNames.incorectResponse,
+  type: dispatchNames.incorrectResponse,
   payload: {
     index,
   },
 });
 
 const correctResponse = (index: number): dispatchInterface => ({
-  type: dispatchNames.corectResponse,
+  type: dispatchNames.correctResponse,
   payload: {
     index,
   },
@@ -41,7 +42,7 @@ export const _AddNewQues = (question: string, answer: string) => (
     addNewQues({
       question,
       answer,
-      _id: uuid4(),
+      _id: uuidv4(),
       box: '1',
     }),
   );
@@ -49,4 +50,16 @@ export const _AddNewQues = (question: string, answer: string) => (
 
 export const _ResetState = (newState: stateInterface) => (dispatch: any) => {
   dispatch(resetState(newState));
+};
+
+export const _CorrectResponse = (index: number) => (dispatch: any) => {
+  dispatch(correctResponse(index));
+};
+
+export const _IncorrectResponse = (index: number) => (dispatch: any) => {
+  dispatch(incorrectResponse(index));
+};
+
+export const _SubmitSession = () => (dispatch: any) => {
+  dispatch(submitSession());
 };

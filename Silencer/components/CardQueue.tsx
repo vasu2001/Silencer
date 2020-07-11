@@ -13,15 +13,24 @@ import {
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FlashCardComponent from './FlashCard';
+import {questionInterface} from '../redux/utils';
 
 interface FlashCardInterface {
   question: string;
   answer: string;
 }
-export interface CardQueueProps {}
+
+export interface CardQueueProps {
+  questions: questionInterface[];
+  correctResponse: (index: number) => void;
+  incorrectResponse: (index: number) => void;
+  sessionSubmit: () => void;
+  session: number;
+}
 
 export interface CardQueueState {
   activeQues: number;
+  sessionQuesNo: number;
 }
 
 export default class CardQueueComponent extends React.Component<
@@ -31,26 +40,12 @@ export default class CardQueueComponent extends React.Component<
   constructor(props: CardQueueProps) {
     super(props);
     this.state = {
-      activeQues: 0,
+      activeQues: this.getNextQues(-1, this.props.session),
+      sessionQuesNo: 0,
     };
 
     this.width = Dimensions.get('window').width;
   }
-
-  cardList: FlashCardInterface[] = [
-    {
-      question: 'captital of india',
-      answer: 'delhi',
-    },
-    {
-      question: 'captital of india 2',
-      answer: 'delhi',
-    },
-    {
-      question: 'captital of india 3',
-      answer: 'delhi',
-    },
-  ];
 
   scollRef: FlatList | null = null;
   //   activeCardIndex: number = 0;
@@ -58,8 +53,21 @@ export default class CardQueueComponent extends React.Component<
   cardTwoAnimate: Animated.Value = new Animated.Value(-1);
   width: number = 0;
 
+  componentDidUpdate() {
+    if (this.state.activeQues >= this.props.questions.length) {
+      this.props.sessionSubmit();
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.questions.length === 0) this.props.sessionSubmit();
+    if (this.state.activeQues >= this.props.questions.length) {
+      this.props.sessionSubmit();
+    }
+  }
+
   public render() {
-    const evenCard: boolean = this.state.activeQues % 2 === 0;
+    const evenCard: boolean = this.state.sessionQuesNo % 2 === 0;
     const cardOneIndex: number = this.state.activeQues - (evenCard ? 0 : 1);
     const cardTwoIndex = this.state.activeQues - (evenCard ? 1 : 0);
 
@@ -68,13 +76,21 @@ export default class CardQueueComponent extends React.Component<
         <View style={styles.cardParent}>
           <Animated.View
             style={[this.cardStyle(this.cardOneAnimate), styles.cardAnimated]}>
-            <FlashCardComponent {...this.cardList[cardOneIndex]} />
+            <FlashCardComponent
+              answer={this.props.questions[cardOneIndex]?.answer}
+              question={this.props.questions[cardOneIndex]?.question}
+            />
           </Animated.View>
+
           <Animated.View
             style={[this.cardStyle(this.cardTwoAnimate), styles.cardAnimated]}>
-            <FlashCardComponent {...this.cardList[cardTwoIndex]} />
+            <FlashCardComponent
+              answer={this.props.questions[cardTwoIndex]?.answer}
+              question={this.props.questions[cardTwoIndex]?.question}
+            />
           </Animated.View>
         </View>
+
         <View style={styles.buttonRow}>
           <TouchableOpacity
             onPress={() => this.correctResponse(this.state.activeQues)}>
@@ -82,6 +98,7 @@ export default class CardQueueComponent extends React.Component<
               <Entypo name="check" size={35} color="white" />
             </View>
           </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => this.incorrectResponse(this.state.activeQues)}>
             <View style={[styles.buttonView, styles.incorrectButton]}>
@@ -112,11 +129,13 @@ export default class CardQueueComponent extends React.Component<
 
   private correctResponse = (index: number): void => {
     console.log('Correct response');
+    this.props.correctResponse(index);
     this.nextQues();
   };
 
   private incorrectResponse = (index: number): void => {
     console.log('Incorrect response');
+    this.props.incorrectResponse(index);
     this.nextQues();
   };
 
@@ -145,9 +164,20 @@ export default class CardQueueComponent extends React.Component<
       ),
     ]).start();
     this.setState((prevState) => ({
-      ...prevState,
-      activeQues: prevState.activeQues + 1,
+      activeQues: this.getNextQues(prevState.activeQues, this.props.session),
+      sessionQuesNo: prevState.sessionQuesNo + 1,
     }));
+  };
+
+  private getNextQues = (startIndex: number, session: number): number => {
+    let nextIndex = startIndex + 1;
+    while (
+      nextIndex < this.props.questions.length &&
+      session % parseInt(this.props.questions[nextIndex]?.box) != 0
+    ) {
+      nextIndex++;
+    }
+    return nextIndex;
   };
 }
 

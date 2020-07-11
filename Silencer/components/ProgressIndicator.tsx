@@ -9,10 +9,7 @@ import {
 import {PieChart} from 'react-native-chart-kit';
 
 export interface ProgressIndicatorProps {
-  questionBoxes: {
-    boxFrequency: string;
-    noOfQues: number;
-  }[];
+  progress: {[key: string]: number};
 }
 
 export interface ProgressIndicatorState {}
@@ -38,9 +35,9 @@ export default class ProgressIndicatorComponent extends React.Component<
       <View style={styles.mainContainer}>
         <Text style={styles.headingText}>My Progress</Text>
         <PieChart
-          data={this.props.questionBoxes.map((item, index) => ({
-            name: this.labels[item.boxFrequency],
-            frequency: item.noOfQues,
+          data={Object.keys(this.props.progress).map((item, index) => ({
+            name: this.labels[item],
+            frequency: this.props.progress[item],
             color: this.colors[index],
             legendFontColor: 'black',
             legendFontSize: 15,

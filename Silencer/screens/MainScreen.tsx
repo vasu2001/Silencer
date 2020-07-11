@@ -3,18 +3,24 @@ import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import ProgressIndicatorComponent from '../components/ProgressIndicator';
 import {StackScreenProps} from '@react-navigation/stack';
 import CustomButton from '../components/CustomButton';
+import {connect, ConnectedProps} from 'react-redux';
+import {stateInterface, questionInterface} from '../redux/utils';
+import {NavigationProp} from '@react-navigation/native';
 
 export interface MainScreenProps {
-  navigation: {navigate: (routename: string) => void};
+  navigation: NavigationProp<any>;
+  totalCards: number;
+  session: number;
+  progress: {[key: string]: number};
 }
 
 export interface MainScreenState {}
 
-export default class MainScreenComponent extends React.Component<
-  MainScreenProps,
+class MainScreenComponent extends React.Component<
+  MainScreenProps & ConnectedProps<typeof connector>,
   MainScreenState
 > {
-  constructor(props: MainScreenProps) {
+  constructor(props: MainScreenProps & ConnectedProps<typeof connector>) {
     super(props);
     this.state = {};
   }
@@ -22,19 +28,24 @@ export default class MainScreenComponent extends React.Component<
   public render() {
     return (
       <View style={styles.mainContainer}>
-        <ProgressIndicatorComponent questionBoxes={tempDataProgress} />
+        <ProgressIndicatorComponent progress={this.props.progress} />
         <View>
-          <Text style={styles.totalText}>Total Cards: {40}</Text>
+          <Text style={styles.totalText}>
+            Total Cards: {this.props.totalCards}
+          </Text>
           <CustomButton text="Add Card" callback={this.addCard} />
         </View>
 
-        <CustomButton text="Resume Learning" callback={this.resume} />
+        <View>
+          <Text style={styles.totalText}>Session: {this.props.session}</Text>
+          <CustomButton text="Learn" callback={this.resume} />
+        </View>
       </View>
     );
   }
 
   private resume = (): void => {
-    this.props.navigation.navigate('Learn');
+    this.props.navigation.navigate('Learn', {progress: this.props.progress});
   };
 
   private addCard = (): void => {
@@ -55,18 +66,23 @@ const styles = StyleSheet.create({
   },
 });
 
-const tempDataProgress = [
-  {
-    boxFrequency: '1',
-    noOfQues: 10,
-  },
-  {
-    boxFrequency: '3',
-    noOfQues: 5,
-  },
+const mapStateToProps = (state: stateInterface): object => {
+  let props: {
+    progress: {[key: string]: number};
+    totalCards: number;
+    session: number;
+  } = {
+    progress: {'1': 0, '3': 0, '5': 0},
+    totalCards: 0,
+    session: state.session,
+  };
+  state.questions.forEach((ques: questionInterface): void => {
+    props.progress[ques.box]++;
+    props.totalCards++;
+  });
+  return props;
+};
 
-  {
-    boxFrequency: '5',
-    noOfQues: 6,
-  },
-];
+const connector = connect(mapStateToProps);
+
+export default connector(MainScreenComponent);

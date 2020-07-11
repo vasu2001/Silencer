@@ -6,7 +6,6 @@ export interface questionInterface {
 }
 
 export interface stateInterface {
-  activeQues: number;
   session: number;
   questions: questionInterface[];
 }

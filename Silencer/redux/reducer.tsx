@@ -1,10 +1,11 @@
 import {stateInterface, dispatchNames} from './utils';
 
 const MainReducer = (
-  state: stateInterface = {activeQues: 0, questions: [], session: 1},
+  state: stateInterface = {questions: [], session: 1},
   action: {type: string; payload?: any},
 ) => {
   let newState: stateInterface;
+  console.log(action);
 
   switch (action.type) {
     case dispatchNames.addNewQues:
@@ -17,20 +18,19 @@ const MainReducer = (
       newState.questions[action.payload.index].box = getNextBox(
         newState.questions[action.payload.index].box,
       );
-      newState.activeQues++;
+      // newState.activeQues++;
       return newState;
 
     case dispatchNames.incorrectResponse:
       newState = {...state};
       newState.questions[action.payload.index].box = '1';
-      newState.activeQues++;
+      // newState.activeQues++;
       return newState;
 
     case dispatchNames.submitSession:
       return {
         ...state,
         session: state.session++,
-        activeQues: 0,
       };
 
     case dispatchNames.resetState: {
