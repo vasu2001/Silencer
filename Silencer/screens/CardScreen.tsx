@@ -68,7 +68,10 @@ class CardScreenComponent extends React.Component<
   private submitSession = (): void => {
     // console.log('submitting from cardScreen');
     this.props.navigation.goBack();
-    _SubmitSession()(this.props.dispatch);
+    _SubmitSession({
+      questions: this.props.questions,
+      session: this.props.session,
+    })(this.props.dispatch);
   };
 }
 

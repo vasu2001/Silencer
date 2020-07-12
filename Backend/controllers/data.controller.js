@@ -24,7 +24,7 @@ const newQues = async (req, res) => {
     const question = new questionModel({
       userId,
       answer: req.body.answer,
-      question: req.body.answer,
+      question: req.body.question,
       box: "1",
       _id: new ObjectId(),
     });

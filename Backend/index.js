@@ -1,10 +1,12 @@
 require("./db/connect");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const express = require("express");
 const app = express();
 const port = 8080; // default port to listen
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use("/main", require("./routes/data.routes"));

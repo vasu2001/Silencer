@@ -6,6 +6,7 @@ import CustomButton from '../components/CustomButton';
 import {connect, ConnectedProps} from 'react-redux';
 import {stateInterface, questionInterface} from '../redux/utils';
 import {NavigationProp} from '@react-navigation/native';
+import {_ResetState} from '../redux/actions';
 
 export interface MainScreenProps {
   navigation: NavigationProp<any>;
@@ -23,6 +24,10 @@ class MainScreenComponent extends React.Component<
   constructor(props: MainScreenProps & ConnectedProps<typeof connector>) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    _ResetState()(this.props.dispatch);
   }
 
   public render() {

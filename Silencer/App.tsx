@@ -26,7 +26,6 @@ import {Provider} from 'react-redux';
 declare const global: {HermesInternal: null | {}};
 const store = createStore(MainReducer, {
   questions: [],
-  activeQues: 0,
   session: 1,
 });
 
