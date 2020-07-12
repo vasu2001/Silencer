@@ -5,8 +5,12 @@ const ObjectId = require("mongoose").Types.ObjectId;
 const userId = new ObjectId("5f0a66bd1c0fce782bcf0b4d");
 
 const getAllQues = async (req, res) => {
-  const dbResponse = await questionModel.find({ userId });
-  res.send(dbResponse);
+  const sessionResponse = await userModel.find({ _id: userId }, "session -_id");
+  const quesResponse = await questionModel.find({ userId }, "-__v -userId");
+  res.send({
+    session: sessionResponse[0].session,
+    questions: quesResponse,
+  });
 };
 
 const newQues = async (req, res) => {
@@ -33,8 +37,12 @@ const newQues = async (req, res) => {
 };
 
 const getAllBoxes = async (req, res) => {
-  const dbResponse = await questionModel.find({ userId }, "_id box");
-  res.send(dbResponse);
+  const sessionResponse = await userModel.find({ _id: userId }, "session -_id");
+  const quesResponse = await questionModel.find({ userId }, "_id box");
+  res.send({
+    session: sessionResponse[0].session,
+    questions: quesResponse,
+  });
 };
 
 const submitSession = async (req, res) => {
