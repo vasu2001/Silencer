@@ -2,15 +2,22 @@ const userModel = require("../db/user.model");
 const questionModel = require("../db/question.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
-const userId = new ObjectId("5f0a66bd1c0fce782bcf0b4d");
-
 const getAllQues = async (req, res) => {
-  const sessionResponse = await userModel.find({ _id: userId }, "session -_id");
-  const quesResponse = await questionModel.find({ userId }, "-__v -userId");
-  res.send({
-    session: sessionResponse[0].session,
-    questions: quesResponse,
-  });
+  try {
+    const userId = new ObjectId(req.userId);
+
+    const sessionResponse = await userModel.find(
+      { _id: userId },
+      "session -_id"
+    );
+    const quesResponse = await questionModel.find({ userId }, "-__v -userId");
+    res.send({
+      session: sessionResponse[0].session,
+      questions: quesResponse,
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
 };
 
 const newQues = async (req, res) => {
@@ -21,6 +28,8 @@ const newQues = async (req, res) => {
   }
 
   try {
+    const userId = new ObjectId(req.userId);
+
     const question = new questionModel({
       userId,
       answer: req.body.answer,
@@ -37,12 +46,21 @@ const newQues = async (req, res) => {
 };
 
 const getAllBoxes = async (req, res) => {
-  const sessionResponse = await userModel.find({ _id: userId }, "session -_id");
-  const quesResponse = await questionModel.find({ userId }, "_id box");
-  res.send({
-    session: sessionResponse[0].session,
-    questions: quesResponse,
-  });
+  try {
+    const userId = new ObjectId(req.userId);
+
+    const sessionResponse = await userModel.find(
+      { _id: userId },
+      "session -_id"
+    );
+    const quesResponse = await questionModel.find({ userId }, "_id box");
+    res.send({
+      session: sessionResponse[0].session,
+      questions: quesResponse,
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
 };
 
 const submitSession = async (req, res) => {
@@ -52,6 +70,8 @@ const submitSession = async (req, res) => {
   }
 
   try {
+    const userId = new ObjectId(req.userId);
+
     await userModel.updateOne(
       { _id: userId },
       { session: req.body.newSessionNo }
