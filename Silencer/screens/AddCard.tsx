@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet, Text, TextInput} from 'react-native';
 import CustomButton from '../components/CustomButton';
+import CustomInput from '../components/CustomInput';
 import {_AddNewQues} from '../redux/actions';
 import {connect, ConnectedProps} from 'react-redux';
 
@@ -28,23 +29,21 @@ class AddCardComponent extends React.Component<
   public render() {
     return (
       <View style={styles.mainContainer}>
-        <View style={styles.formContainer}>
-          <Text style={styles.labelText}>Question</Text>
-          <TextInput
-            value={this.state.quesInput}
-            onChangeText={(text) => this.setState({quesInput: text})}
-            style={styles.textInput}
-          />
-        </View>
+        <CustomInput
+          labelText="Question"
+          value={this.state.quesInput}
+          onChangeText={(text: string): void => {
+            this.setState({quesInput: text});
+          }}
+        />
 
-        <View style={styles.formContainer}>
-          <Text style={styles.labelText}>Answer</Text>
-          <TextInput
-            value={this.state.ansInput}
-            onChangeText={(text) => this.setState({ansInput: text})}
-            style={styles.textInput}
-          />
-        </View>
+        <CustomInput
+          labelText="Answer"
+          value={this.state.ansInput}
+          onChangeText={(text: string): void => {
+            this.setState({ansInput: text});
+          }}
+        />
 
         <CustomButton text="Add" callback={this.addCard} />
         <Text style={{color: 'red', alignSelf: 'center'}}>
@@ -71,20 +70,6 @@ class AddCardComponent extends React.Component<
 const styles = StyleSheet.create({
   mainContainer: {
     margin: 10,
-  },
-  formContainer: {
-    marginBottom: 20,
-  },
-  labelText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  textInput: {
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 15,
-    padding: 2,
-    paddingHorizontal: 5,
   },
 });
 

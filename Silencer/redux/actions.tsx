@@ -1,8 +1,9 @@
 import {dispatchNames, stateInterface, questionInterface} from './utils';
 import 'react-native-get-random-values';
-import {v4 as uuidv4} from 'uuid';
-import axios from '../axios/axios';
+import axios, {setAuthorizationToken} from '../axios/axios';
 import {AxiosRequestConfig, AxiosResponse} from 'axios';
+import {Dispatch} from 'react';
+import Snackbar from 'react-native-snackbar';
 
 interface dispatchInterface {
   type: string;
@@ -37,8 +38,16 @@ const resetState = (newState: stateInterface): dispatchInterface => ({
   payload: newState,
 });
 
+const signIn = (): dispatchInterface => ({
+  type: dispatchNames.signIn,
+});
+
+const signOut = (): dispatchInterface => ({
+  type: dispatchNames.signOut,
+});
+
 export const _AddNewQues = (question: string, answer: string) => async (
-  dispatch: any,
+  dispatch: Dispatch<any>,
 ) => {
   try {
     interface reqBodyInterface {
@@ -53,39 +62,37 @@ export const _AddNewQues = (question: string, answer: string) => async (
 
     const res: AxiosResponse = await axios.post('/main/newQues', reqBody);
 
-    dispatch(
-      addNewQues({
-        question,
-        answer,
-        _id: res.data._id,
-        box: '1',
-      }),
-    );
+    dispatch(addNewQues(res.data));
   } catch (error) {
     console.log(error);
   }
 };
 
-export const _ResetState = () => async (dispatch: any) => {
+export const _ResetState = () => async (dispatch: Dispatch<any>) => {
   try {
     const res: AxiosRequestConfig = await axios.get('/main/getAllQues');
     console.log(res.data);
+    res.data.isSignIn = true;
     dispatch(resetState(res.data));
   } catch (error) {
     console.log(error);
   }
 };
 
-export const _CorrectResponse = (index: number) => (dispatch: any) => {
+export const _CorrectResponse = (index: number) => (
+  dispatch: Dispatch<any>,
+) => {
   dispatch(correctResponse(index));
 };
 
-export const _IncorrectResponse = (index: number) => (dispatch: any) => {
+export const _IncorrectResponse = (index: number) => (
+  dispatch: Dispatch<any>,
+) => {
   dispatch(incorrectResponse(index));
 };
 
 export const _SubmitSession = (state: stateInterface) => async (
-  dispatch: any,
+  dispatch: Dispatch<any>,
 ) => {
   try {
     interface reqBodyInterface {
@@ -107,4 +114,66 @@ export const _SubmitSession = (state: stateInterface) => async (
   } catch (error) {
     console.log(error);
   }
+};
+
+export const _SignIn = (
+  username: string,
+  password: string,
+  failCallback: () => void,
+) => async (dispatch: Dispatch<any>) => {
+  try {
+    const reqBody: {username: string; password: string} = {username, password};
+    const authRes = await axios.post('/auth/signIn', reqBody);
+
+    console.log(authRes.data);
+
+    await setAuthorizationToken(authRes.data.token);
+    dispatch(signIn());
+  } catch (err) {
+    Snackbar.show({
+      text: 'Wrong username or password',
+      textColor: 'white',
+      backgroundColor: 'black',
+      duration: Snackbar.LENGTH_SHORT,
+    });
+    failCallback();
+  }
+};
+
+export const _SignUp = (
+  username: string,
+  password: string,
+  failCallback: () => void,
+) => async (dispatch: Dispatch<any>) => {
+  try {
+    const reqBody: {username: string; password: string} = {username, password};
+    const authRes = await axios.post('/auth/signUp', reqBody);
+
+    await setAuthorizationToken(authRes.data.token);
+    dispatch(signIn());
+  } catch (err) {
+    Snackbar.show({
+      text: 'Error!',
+      textColor: 'white',
+      backgroundColor: 'black',
+      duration: Snackbar.LENGTH_SHORT,
+    });
+    failCallback();
+  }
+};
+
+export const _SignOut = () => async (dispatch: Dispatch<any>) => {
+  try {
+    await setAuthorizationToken();
+    dispatch(signOut());
+  } catch (err) {}
+};
+
+export const _TokenSignIn = (token: string) => async (
+  dispatch: Dispatch<any>,
+) => {
+  try {
+    await setAuthorizationToken(token);
+    dispatch(signIn());
+  } catch (err) {}
 };

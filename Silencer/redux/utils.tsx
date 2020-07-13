@@ -8,6 +8,7 @@ export interface questionInterface {
 export interface stateInterface {
   session: number;
   questions: questionInterface[];
+  isSignIn: boolean;
 }
 
 export const dispatchNames: {[key: string]: string} = {
@@ -16,4 +17,6 @@ export const dispatchNames: {[key: string]: string} = {
   incorrectResponse: 'INCORRECT_RESPONSE',
   submitSession: 'SUBMIT_SESSION',
   resetState: 'RESET_STATE',
+  signIn: 'SIGN_IN',
+  signOut: 'SIGN_OUT',
 };

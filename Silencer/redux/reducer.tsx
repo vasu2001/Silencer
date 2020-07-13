@@ -1,7 +1,7 @@
 import {stateInterface, dispatchNames} from './utils';
 
 const MainReducer = (
-  state: stateInterface = {questions: [], session: 1},
+  state: stateInterface = {questions: [], session: 1, isSignIn: false},
   action: {type: string; payload?: any},
 ) => {
   let newState: stateInterface;
@@ -34,8 +34,22 @@ const MainReducer = (
       };
 
     case dispatchNames.resetState: {
-      return action.payload;
+      return {
+        ...action.payload,
+      };
     }
+
+    case dispatchNames.signIn:
+      return {
+        ...state,
+        isSignIn: true,
+      };
+
+    case dispatchNames.signOut:
+      return {
+        ...state,
+        isSignIn: false,
+      };
 
     default:
       return state;

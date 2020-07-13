@@ -27,6 +27,7 @@ declare const global: {HermesInternal: null | {}};
 const store = createStore(MainReducer, {
   questions: [],
   session: 1,
+  isSignIn: false,
 });
 
 const App = () => {

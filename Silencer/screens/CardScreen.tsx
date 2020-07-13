@@ -71,6 +71,7 @@ class CardScreenComponent extends React.Component<
     _SubmitSession({
       questions: this.props.questions,
       session: this.props.session,
+      isSignIn: true,
     })(this.props.dispatch);
   };
 }

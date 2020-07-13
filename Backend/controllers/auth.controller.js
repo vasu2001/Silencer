@@ -11,7 +11,7 @@ const signUp = async (req, res) => {
     const hash = await bcrypt.hash(req.body.password, salt);
 
     const user = new userModel({
-      username: req.username,
+      username: req.body.username,
       password: hash,
       session: 1,
     });
@@ -27,10 +27,16 @@ const signUp = async (req, res) => {
 
 const signIn = async (req, res) => {
   try {
-    const userRes = await userModel.findOne({ username: req.username });
+    const userRes = await userModel.findOne({ username: req.body.username });
     // console.log(userRes);
 
-    const isMatch = bcrypt.compare(req.body.password, userRes?.password);
+    if (!userRes) {
+      res.status(400).send({ error: "wrong username or password" });
+      return;
+    }
+
+    const isMatch = await bcrypt.compare(req.body.password, userRes?.password);
+    // console.log(isMatch);
     if (isMatch) {
       const token = jwt.sign({ userId: userRes?._id }, secretKey);
       res.send({ token });
