@@ -30,9 +30,12 @@ class MainNavigationComponent extends React.Component<
     if (this.props.isSignIn)
       return (
         <NavigationContainer>
-          <this.Stack.Navigator
-            screenOptions={{headerRight: this.logOutButton}}>
-            <this.Stack.Screen name="Home" component={MainScreenComponent} />
+          <this.Stack.Navigator>
+            <this.Stack.Screen
+              name="Home"
+              component={MainScreenComponent}
+              options={{headerRight: this.logOutButton}}
+            />
             <this.Stack.Screen name="Learn" component={CardScreenComponent} />
             <this.Stack.Screen name="Add Card" component={AddCardComponent} />
           </this.Stack.Navigator>

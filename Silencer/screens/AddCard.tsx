@@ -26,6 +26,9 @@ class AddCardComponent extends React.Component<
     };
   }
 
+  quesRef: TextInput | null = null;
+  ansRef: TextInput | null = null;
+
   public render() {
     return (
       <View style={styles.mainContainer}>
@@ -35,6 +38,7 @@ class AddCardComponent extends React.Component<
           onChangeText={(text: string): void => {
             this.setState({quesInput: text});
           }}
+          setRef={(ref) => (this.quesRef = ref)}
         />
 
         <CustomInput
@@ -43,6 +47,7 @@ class AddCardComponent extends React.Component<
           onChangeText={(text: string): void => {
             this.setState({ansInput: text});
           }}
+          setRef={(ref) => (this.ansRef = ref)}
         />
 
         <CustomButton text="Add" callback={this.addCard} />
@@ -63,6 +68,7 @@ class AddCardComponent extends React.Component<
         this.state.ansInput,
       )(this.props.dispatch);
       this.setState({ansInput: '', quesInput: ''});
+      this.quesRef?.focus();
     }
   };
 }

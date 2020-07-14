@@ -6,6 +6,7 @@ export interface CustomInputProps {
   labelText: string;
   onChangeText: (text: string) => void;
   isPassword?: boolean;
+  setRef?: (ref: TextInput) => void;
 }
 
 const CustomButton: React.SFC<CustomInputProps> = ({
@@ -13,6 +14,7 @@ const CustomButton: React.SFC<CustomInputProps> = ({
   labelText,
   onChangeText,
   isPassword = false,
+  setRef = (ref) => {},
 }) => {
   return (
     <View style={styles.formContainer}>
@@ -22,6 +24,7 @@ const CustomButton: React.SFC<CustomInputProps> = ({
         onChangeText={onChangeText}
         style={styles.textInput}
         secureTextEntry={isPassword}
+        ref={setRef}
       />
     </View>
   );

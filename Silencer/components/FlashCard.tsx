@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     borderRadius: 20,
-    elevation: 5,
+    elevation: 3,
     height: 250,
     width: 250,
     backgroundColor: 'white',
