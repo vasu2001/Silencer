@@ -1,25 +1,14 @@
 import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {connect, ConnectedProps} from 'react-redux';
+import {connect} from 'react-redux';
 import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CustomInput';
 import {_SignIn, _TokenSignIn, _SignUp} from '../redux/actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import Snackbar from 'react-native-snackbar';
 
-interface AuthScreenProps {}
-
-interface AuthScreenState {
-  username: string;
-  password: string;
-  loading: false;
-}
-
-class AuthScreen extends React.Component<
-  AuthScreenProps & ConnectedProps<typeof connector>,
-  AuthScreenState
-> {
-  constructor(props: AuthScreenProps & ConnectedProps<typeof connector>) {
+class AuthScreen extends React.Component {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -46,14 +35,14 @@ class AuthScreen extends React.Component<
           <CustomInput
             labelText="Username"
             value={this.state.username}
-            onChangeText={(text: string): void => {
+            onChangeText={(text) => {
               this.setState({username: text});
             }}
           />
           <CustomInput
             labelText="Password"
             value={this.state.password}
-            onChangeText={(text: string): void => {
+            onChangeText={(text) => {
               this.setState({password: text});
             }}
             isPassword={true}
@@ -74,7 +63,7 @@ class AuthScreen extends React.Component<
     );
   }
 
-  signIn = (): void => {
+  signIn = () => {
     if (this.checkForEmpty()) return;
 
     _SignIn(this.state.username, this.state.password, () => {
@@ -82,7 +71,7 @@ class AuthScreen extends React.Component<
     })(this.props.dispatch);
   };
 
-  signUp = (): void => {
+  signUp = () => {
     if (this.checkForEmpty()) return;
 
     _SignUp(this.state.username, this.state.password, () => {
@@ -90,7 +79,7 @@ class AuthScreen extends React.Component<
     })(this.props.dispatch);
   };
 
-  checkForEmpty = (): boolean => {
+  checkForEmpty = () => {
     const isEmpty = !this.state.username || !this.state.password;
     if (isEmpty) {
       Snackbar.show({

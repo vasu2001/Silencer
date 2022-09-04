@@ -1,17 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-interface CustomButtonProps {
-  text: string;
-  callback: () => void;
-  active?: boolean;
-}
-
-const CustomButton: React.SFC<CustomButtonProps> = ({
-  text,
-  callback,
-  active = true,
-}) => {
+const CustomButton = ({text, callback, active = true}) => {
   return (
     <TouchableOpacity
       style={{marginVertical: 10}}

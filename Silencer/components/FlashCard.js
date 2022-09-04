@@ -5,23 +5,10 @@ import {
   Text,
   TouchableWithoutFeedback,
   Animated,
-  StyleProp,
-  ViewStyle,
-  TouchableOpacity,
 } from 'react-native';
 
-export interface FlashCardProps {
-  question: string;
-  answer: string;
-}
-
-export interface FlashCardState {}
-
-export default class FlashCardComponent extends React.Component<
-  FlashCardProps,
-  FlashCardState
-> {
-  constructor(props: FlashCardProps) {
+export default class FlashCardComponent extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {};
 
@@ -39,13 +26,13 @@ export default class FlashCardComponent extends React.Component<
     );
   }
 
-  private answerVisible: Animated.Value = new Animated.Value(0);
+  answerVisible = new Animated.Value(0);
 
   //value of animated state for comparisions
-  private answerVisibleValue: number = 0;
+  answerVisibleValue = 0;
 
-  private frontInterpolate: Animated.AnimatedInterpolation | null = null;
-  private backInterpolate: Animated.AnimatedInterpolation | null = null;
+  frontInterpolate = null;
+  backInterpolate = null;
 
   componentWillReceiveProps() {
     // this.answerVisible.setValue(0);
@@ -56,7 +43,7 @@ export default class FlashCardComponent extends React.Component<
     }).start();
   }
 
-  public render() {
+  render() {
     const frontCardStyle = {transform: [{rotateY: this.frontInterpolate}]};
     const backCardStyle = {transform: [{rotateY: this.backInterpolate}]};
 
@@ -81,7 +68,7 @@ export default class FlashCardComponent extends React.Component<
     );
   }
 
-  private toggleAnswerVisible = (): void => {
+  toggleAnswerVisible = () => {
     // console.log('animation triggered');
     Animated.spring(this.answerVisible, {
       toValue: this.answerVisibleValue >= 90 ? 0 : 180,

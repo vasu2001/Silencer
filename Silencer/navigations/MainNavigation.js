@@ -4,29 +4,21 @@ import {createStackNavigator} from '@react-navigation/stack';
 import MainScreenComponent from '../screens/MainScreen';
 import CardScreenComponent from '../screens/CardScreen';
 import AddCardComponent from '../screens/AddCard';
-import {connect, ConnectedProps} from 'react-redux';
-import {stateInterface} from 'redux/utils';
+import {connect} from 'react-redux';
 import AuthScreen from '../screens/AuthScreen';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {_SignOut} from '../redux/actions';
 
-export interface MainNavigationProps {}
-
-export interface MainNavigationState {}
-
-class MainNavigationComponent extends React.Component<
-  MainNavigationProps & ConnectedProps<typeof connector>,
-  MainNavigationState
-> {
-  constructor(props: MainNavigationProps & ConnectedProps<typeof connector>) {
+class MainNavigationComponent extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {};
   }
 
   Stack = createStackNavigator();
 
-  public render() {
+  render() {
     if (this.props.isSignIn)
       return (
         <NavigationContainer>
@@ -44,7 +36,7 @@ class MainNavigationComponent extends React.Component<
     else return <AuthScreen />;
   }
 
-  logOutButton: React.SFC<any> = (props: any) => {
+  logOutButton = (props) => {
     return (
       <TouchableOpacity
         onPress={() => {
@@ -61,7 +53,7 @@ class MainNavigationComponent extends React.Component<
   };
 }
 
-const mapStateToProps = (state: stateInterface) => ({
+const mapStateToProps = (state) => ({
   isSignIn: state.isSignIn,
 });
 

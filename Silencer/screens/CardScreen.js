@@ -1,32 +1,20 @@
 import * as React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import CardQueueComponent from '../components/CardQueue';
-import {NavigationProp, RouteProp} from '@react-navigation/native';
-import {connect, ConnectedProps} from 'react-redux';
-import {stateInterface} from '../redux/utils';
+import {connect} from 'react-redux';
 import {
   _CorrectResponse,
   _IncorrectResponse,
   _SubmitSession,
 } from '../redux/actions';
 
-export interface CardScreenProps {
-  navigation: NavigationProp<any>;
-  route: RouteProp<{progress: {[key: string]: number}}, any>;
-}
-
-export interface CardScreenState {}
-
-class CardScreenComponent extends React.Component<
-  CardScreenProps & ConnectedProps<typeof connector>,
-  CardScreenState
-> {
-  constructor(props: CardScreenProps & ConnectedProps<typeof connector>) {
+class CardScreenComponent extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {};
   }
 
-  public render() {
+  render() {
     return (
       <View style={styles.mainContainer}>
         <CardQueueComponent
@@ -45,7 +33,7 @@ class CardScreenComponent extends React.Component<
     );
   }
 
-  private getSessionQuestions = (): number => {
+  getSessionQuestions = () => {
     let no = 0;
     Object.keys(this.props.route.params.progress).forEach(
       (box) =>
@@ -57,15 +45,15 @@ class CardScreenComponent extends React.Component<
     return no;
   };
 
-  private correctResponse = (index: number): void => {
+  correctResponse = (index) => {
     _CorrectResponse(index)(this.props.dispatch);
   };
 
-  private incorrectResponse = (index: number): void => {
+  incorrectResponse = (index) => {
     _IncorrectResponse(index)(this.props.dispatch);
   };
 
-  private submitSession = (): void => {
+  submitSession = () => {
     // console.log('submitting from cardScreen');
     this.props.navigation.goBack();
     _SubmitSession({
@@ -90,7 +78,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state: stateInterface): stateInterface => state;
+const mapStateToProps = (state) => state;
 const connector = connect(mapStateToProps);
 
 export default connector(CardScreenComponent);

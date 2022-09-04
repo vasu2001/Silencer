@@ -1,15 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet, Text, TextInput} from 'react-native';
 
-export interface CustomInputProps {
-  value: string;
-  labelText: string;
-  onChangeText: (text: string) => void;
-  isPassword?: boolean;
-  setRef?: (ref: TextInput) => void;
-}
-
-const CustomButton: React.SFC<CustomInputProps> = ({
+const CustomButton = ({
   value,
   labelText,
   onChangeText,

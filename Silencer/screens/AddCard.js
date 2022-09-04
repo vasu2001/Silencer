@@ -1,23 +1,12 @@
 import * as React from 'react';
-import {View, StyleSheet, Text, TextInput} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CustomInput';
 import {_AddNewQues} from '../redux/actions';
-import {connect, ConnectedProps} from 'react-redux';
+import {connect} from 'react-redux';
 
-export interface AddCardProps {}
-
-export interface AddCardState {
-  quesInput: string;
-  ansInput: string;
-  error: string;
-}
-
-class AddCardComponent extends React.Component<
-  AddCardProps & ConnectedProps<typeof connector>,
-  AddCardState
-> {
-  constructor(props: AddCardProps & ConnectedProps<typeof connector>) {
+class AddCardComponent extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       quesInput: '',
@@ -26,16 +15,16 @@ class AddCardComponent extends React.Component<
     };
   }
 
-  quesRef: TextInput | null = null;
-  ansRef: TextInput | null = null;
+  quesRef = null;
+  ansRef = null;
 
-  public render() {
+  render() {
     return (
       <View style={styles.mainContainer}>
         <CustomInput
           labelText="Question"
           value={this.state.quesInput}
-          onChangeText={(text: string): void => {
+          onChangeText={(text) => {
             this.setState({quesInput: text});
           }}
           setRef={(ref) => (this.quesRef = ref)}
@@ -44,7 +33,7 @@ class AddCardComponent extends React.Component<
         <CustomInput
           labelText="Answer"
           value={this.state.ansInput}
-          onChangeText={(text: string): void => {
+          onChangeText={(text) => {
             this.setState({ansInput: text});
           }}
           setRef={(ref) => (this.ansRef = ref)}
@@ -58,7 +47,7 @@ class AddCardComponent extends React.Component<
     );
   }
 
-  private addCard = (): void => {
+  addCard = () => {
     if (this.state.ansInput === '' || this.state.quesInput === '') {
       this.setState({error: 'Enter question and answer'});
     } else {

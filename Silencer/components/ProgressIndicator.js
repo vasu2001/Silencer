@@ -1,36 +1,21 @@
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  ProgressBarAndroid,
-  Dimensions,
-} from 'react-native';
+import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import {PieChart} from 'react-native-chart-kit';
 
-export interface ProgressIndicatorProps {
-  progress: {[key: string]: number};
-}
-
-export interface ProgressIndicatorState {}
-
-export default class ProgressIndicatorComponent extends React.Component<
-  ProgressIndicatorProps,
-  ProgressIndicatorState
-> {
-  constructor(props: ProgressIndicatorProps) {
+export default class ProgressIndicatorComponent extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {};
   }
 
-  colors: string[] = ['red', 'orange', 'yellow'];
-  labels: {[key: string]: string} = {
+  colors = ['red', 'orange', 'yellow'];
+  labels = {
     '1': 'Beginning',
     '3': 'Intermediate',
     '5': 'Learned',
   };
 
-  public render() {
+  render() {
     return (
       <View style={styles.mainContainer}>
         <Text style={styles.headingText}>My Progress</Text>

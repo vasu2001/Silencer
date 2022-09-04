@@ -9,21 +9,14 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import MainNavigationComponent from './navigations/MainNavigation';
 import MainReducer from './redux/reducer';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 
-declare const global: {HermesInternal: null | {}};
+// declare const global: {HermesInternal: null | {}};
 const store = createStore(MainReducer, {
   questions: [],
   session: 1,

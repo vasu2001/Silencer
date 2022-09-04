@@ -1,10 +1,10 @@
-import {stateInterface, dispatchNames} from './utils';
+import {dispatchNames} from './utils';
 
 const MainReducer = (
-  state: stateInterface = {questions: [], session: 1, isSignIn: false},
-  action: {type: string; payload?: any},
+  state = {questions: [], session: 1, isSignIn: false},
+  action,
 ) => {
-  let newState: stateInterface;
+  let newState;
   console.log(action);
 
   switch (action.type) {
@@ -56,7 +56,7 @@ const MainReducer = (
   }
 };
 
-const getNextBox = (box: string): string => {
+const getNextBox = (box) => {
   switch (box) {
     case '1':
       return '3';

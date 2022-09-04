@@ -1,27 +1,12 @@
 import * as React from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import ProgressIndicatorComponent from '../components/ProgressIndicator';
-import {StackScreenProps} from '@react-navigation/stack';
 import CustomButton from '../components/CustomButton';
-import {connect, ConnectedProps} from 'react-redux';
-import {stateInterface, questionInterface} from '../redux/utils';
-import {NavigationProp} from '@react-navigation/native';
+import {connect} from 'react-redux';
 import {_ResetState} from '../redux/actions';
 
-export interface MainScreenProps {
-  navigation: NavigationProp<any>;
-  totalCards: number;
-  session: number;
-  progress: {[key: string]: number};
-}
-
-export interface MainScreenState {}
-
-class MainScreenComponent extends React.Component<
-  MainScreenProps & ConnectedProps<typeof connector>,
-  MainScreenState
-> {
-  constructor(props: MainScreenProps & ConnectedProps<typeof connector>) {
+class MainScreenComponent extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {};
   }
@@ -30,7 +15,7 @@ class MainScreenComponent extends React.Component<
     _ResetState()(this.props.dispatch);
   }
 
-  public render() {
+  render() {
     return (
       <View style={styles.mainContainer}>
         <ProgressIndicatorComponent progress={this.props.progress} />
@@ -53,11 +38,11 @@ class MainScreenComponent extends React.Component<
     );
   }
 
-  private learn = (): void => {
+  learn = () => {
     this.props.navigation.navigate('Learn', {progress: this.props.progress});
   };
 
-  private addCard = (): void => {
+  addCard = () => {
     this.props.navigation.navigate('Add Card');
   };
 }
@@ -75,17 +60,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state: stateInterface): object => {
-  let props: {
-    progress: {[key: string]: number};
-    totalCards: number;
-    session: number;
-  } = {
+const mapStateToProps = (state) => {
+  let props = {
     progress: {'1': 0, '3': 0, '5': 0},
     totalCards: 0,
     session: state.session,
   };
-  state.questions.forEach((ques: questionInterface): void => {
+  state.questions.forEach((ques) => {
     props.progress[ques.box]++;
     props.totalCards++;
   });

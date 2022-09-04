@@ -2,43 +2,16 @@ import * as React from 'react';
 import {
   View,
   StyleSheet,
-  Text,
-  FlatList,
-  ListRenderItem,
-  Button,
   Animated,
   Dimensions,
-  ViewProps,
   TouchableOpacity,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FlashCardComponent from './FlashCard';
-import {questionInterface} from '../redux/utils';
 import Snackbar from 'react-native-snackbar';
 
-interface FlashCardInterface {
-  question: string;
-  answer: string;
-}
-
-export interface CardQueueProps {
-  questions: questionInterface[];
-  correctResponse: (index: number) => void;
-  incorrectResponse: (index: number) => void;
-  sessionSubmit: () => void;
-  session: number;
-}
-
-export interface CardQueueState {
-  activeQues: number;
-  sessionQuesNo: number;
-}
-
-export default class CardQueueComponent extends React.Component<
-  CardQueueProps,
-  CardQueueState
-> {
-  constructor(props: CardQueueProps) {
+export default class CardQueueComponent extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       activeQues: this.getNextQues(-1, this.props.session),
@@ -48,12 +21,12 @@ export default class CardQueueComponent extends React.Component<
     this.width = Dimensions.get('window').width;
   }
 
-  scollRef: FlatList | null = null;
-  cardOneAnimate: Animated.Value = new Animated.Value(0);
-  cardTwoAnimate: Animated.Value = new Animated.Value(-1);
-  width: number = 0;
+  scollRef = null;
+  cardOneAnimate = new Animated.Value(0);
+  cardTwoAnimate = new Animated.Value(-1);
+  width = 0;
   //to check if anyother component has already dispatched for sessionSubmit
-  wait: boolean = false;
+  wait = false;
 
   componentDidUpdate() {
     if (this.state.activeQues >= this.props.questions.length && !this.wait) {
@@ -83,9 +56,9 @@ export default class CardQueueComponent extends React.Component<
     }
   }
 
-  public render() {
-    const evenCard: boolean = this.state.sessionQuesNo % 2 === 0;
-    const cardOneIndex: number = this.state.activeQues - (evenCard ? 0 : 1);
+  render() {
+    const evenCard = this.state.sessionQuesNo % 2 === 0;
+    const cardOneIndex = this.state.activeQues - (evenCard ? 0 : 1);
     const cardTwoIndex = this.state.activeQues - (evenCard ? 1 : 0);
 
     return (
@@ -127,7 +100,7 @@ export default class CardQueueComponent extends React.Component<
     );
   }
 
-  private cardStyle = (animatedValue: Animated.Value) => ({
+  cardStyle = (animatedValue) => ({
     transform: [
       {
         translateX: animatedValue.interpolate({
@@ -144,19 +117,19 @@ export default class CardQueueComponent extends React.Component<
     ],
   });
 
-  private correctResponse = (index: number): void => {
+  correctResponse = (index) => {
     console.log('Correct response');
     this.props.correctResponse(index);
     this.nextQues();
   };
 
-  private incorrectResponse = (index: number): void => {
+  incorrectResponse = (index) => {
     console.log('Incorrect response');
     this.props.incorrectResponse(index);
     this.nextQues();
   };
 
-  private nextQues = (): void => {
+  nextQues = () => {
     const activeCardIndex = (this.state.activeQues + 1) % 2;
     Animated.sequence([
       Animated.parallel([
@@ -186,7 +159,7 @@ export default class CardQueueComponent extends React.Component<
     }));
   };
 
-  private getNextQues = (startIndex: number, session: number): number => {
+  getNextQues = (startIndex, session) => {
     let nextIndex = startIndex + 1;
     while (
       nextIndex < this.props.questions.length &&
